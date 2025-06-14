@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quick View - Real Estate Listings</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>📱 Quick Access Listings</h1>
+    <div id="publicListingsContainer"></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      loadPublicListings();
+    });
+
+    function loadPublicListings() {
+      const container = document.getElementById("publicListingsContainer");
+      const listings = JSON.parse(localStorage.getItem("realEstateListings")) || [];
+      container.innerHTML = "";
+
+      listings.forEach((listing, index) => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        if (listing.image) {
+          card.innerHTML += `<img src="${listing.image}" alt="Property Image" />`;
+        }
+
+        let contactBadge = listing.contacted ? '<span class="badge">Contacted</span>' : '';
+        let soldBadge = listing.sold ? '<span class="badge">Sold</span>' : '';
+        let followBadge = `<span class="badge">Follow-ups: ${listing.followUps || 0}</span>`;
+
+        let whatsappButton = listing.contact
+          ? `<a class="whatsapp" href="https://wa.me/91${listing.contact}" target="_blank"><button>💬 WhatsApp</button></a>`
+          : "";
+        let callButton = listing.contact
+          ? `<a class="call" href="tel:${listing.contact}"><button>📱 Call</button></a>`
+          : "";
+
+        card.innerHTML += `
+          <p><strong>${listing.type.toUpperCase()}</strong> | Owner: ${listing.owner}</p>
+          <p>${listing.address}, ${listing.location}</p>
+          <p>Area: ${listing.sqft} sqft | ₹${listing.rate}/sqft</p>
+          <p>Contact: ${listing.contact || 'Not Provided'}</p>
+          <p>Status: ${soldBadge} ${contactBadge} ${followBadge}</p>
+
+          <div class="card-actions">
+            <button class="delete" onclick="deleteListing(${index})">🗑️ Delete</button>
+            <button class="mark-contacted" onclick="markContacted(${index})">📞 Mark Contacted</button>
+            <button class="reset-contacted" onclick="resetContacted(${index})">🔄 Unmark Contacted</button>
+            <button class="add-followup" onclick="followUp(${index})">🔁 Add Follow-up</button>
+            <button class="reset-followup" onclick="resetFollowUp(${index})">♻️ Reset Follow-ups</button>
+            <button class="mark-sold" onclick="markSold(${index})">✅ Mark Sold</button>
+            <button class="reset-sold" onclick="resetSold(${index})">🧹 Reset Sold</button>
+            ${whatsappButton}
+            ${callButton}
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function updateStorage(listings) {
+      localStorage.setItem("realEstateListings", JSON.stringify(listings));
+      loadPublicListings();
+    }
+
+    function deleteListing(index) {
+      let listings = JSON.parse(localStorage.getItem("realEstateListings"));
+      listings.splice(index, 1);
+      updateStorage(listings);
+    }
+
+    function markContacted(index) {
+      let listings = JSON.parse(localStorage.getItem("realEstateListings"));
+      listings[index].contacted = true;
+      updateStorage(listings);
+    }
+
+    function resetContacted(index) {
+      let listings = JSON.parse(localStorage.getItem("realEstateListings"));
+      listings[index].contacted = false;
+      updateStorage(listings);
+    }
+
+    function markSold(index) {
+      let listings = JSON.parse(localStorage.getItem("realEstateListings"));
+      listings[index].sold = true;
+      updateStorage(listings);
+    }
+
+    function resetSold(index) {
+      let listings = JSON.parse(localStorage.getItem("realEstateListings"));
+      listings[index].sold = false;
+      updateStorage(listings);
+    }
+
+    function followUp(index) {
+      let listings = JSON.parse(localStorage.getItem("realEstateListings"));
+      listings[index].followUps = (listings[index].followUps || 0) + 1;
+      updateStorage(listings);
+    }
+
+    function resetFollowUp(index) {
+      let listings = JSON.parse(localStorage.getItem("realEstateListings"));
+      listings[index].followUps = 0;
+      updateStorage(listings);
+    }
+  </script>
+</body>
+</html>
+

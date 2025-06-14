@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Panel - Real Estate</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>🏗️ Real Estate Admin Panel</h1>
+
+    <form id="listingForm">
+      <h2>Add / Edit Listing</h2>
+      <input type="hidden" id="editIndex" />
+      <select id="type" required>
+        <option value="">Select Type</option>
+        <option value="plot">Plot</option>
+        <option value="building">Building</option>
+      </select>
+      <input type="text" id="owner" placeholder="Owner Name" required />
+      <input type="text" id="address" placeholder="Address" required />
+      <input type="text" id="location" placeholder="Location" required />
+      <input type="number" id="sqft" placeholder="Square Feet" required />
+      <input type="number" id="rate" placeholder="Amount per Sqft" required />
+      <input type="text" id="contact" placeholder="Contact Number" required />
+      <input type="url" id="image" placeholder="Image URL (optional)" />
+      <button type="submit">Save Listing</button>
+    </form>
+
+    <h2>📋 Listings</h2>
+    <div id="listingsContainer"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
