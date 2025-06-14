@@ -1,3 +1,4 @@
+
 body {
   font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(135deg, #f0f8ff, #e6f7ff);
@@ -9,14 +10,14 @@ body {
   max-width: 1000px;
   margin: 30px auto;
   padding: 20px;
-  background: #ffffffee;
+  background: #ffffffdd;
   border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 h1, h2 {
   text-align: center;
-  color: #002b5c;
+  color: #003366;
   margin-bottom: 20px;
 }
 
@@ -25,24 +26,23 @@ form {
   flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 30px;
-  background: #f9fbfe;
-  padding: 20px;
+  background: #f7f9fc;
+  padding: 15px;
   border-radius: 10px;
-  border: 1px solid #cbdcf0;
+  border: 1px solid #dce6f0;
 }
 
 input, select, button {
   padding: 10px;
   flex: 1 1 48%;
-  border: 1px solid #b6cce8;
+  border: 1px solid #c5d7ee;
   border-radius: 8px;
   font-size: 14px;
   outline: none;
 }
 
 input:focus, select:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+  border-color: #0056b3;
 }
 
 button {
@@ -53,7 +53,6 @@ button {
   border: none;
   transition: background 0.3s ease;
   flex: 1 1 100%;
-  border-radius: 10px;
 }
 
 button:hover {
@@ -65,9 +64,8 @@ button:hover {
   padding: 15px;
   margin-bottom: 20px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
   border-left: 6px solid #007bff;
-  position: relative;
 }
 
 .card img {
@@ -85,32 +83,21 @@ button:hover {
   margin-top: 12px;
 }
 
-/* Color-coded button styles */
 .card-actions button,
 .card-actions a button {
   flex: 1 1 auto;
   padding: 8px 12px;
+  background-color: #17a2b8;
   color: #fff;
   border: none;
   border-radius: 6px;
   font-size: 13px;
-  transition: background 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s;
 }
 
-.card-actions button.mark-contacted { background-color: #28a745; }
-.card-actions button.reset-contacted { background-color: #ffc107; color: #333; }
-.card-actions button.add-followup { background-color: #17a2b8; }
-.card-actions button.reset-followup { background-color: #6f42c1; }
-.card-actions button.mark-sold { background-color: #dc3545; }
-.card-actions button.reset-sold { background-color: #fd7e14; }
-.card-actions button.delete { background-color: #343a40; }
-.card-actions a.whatsapp { background-color: #25d366; }
-.card-actions a.call { background-color: #007bff; }
-
 .card-actions button:hover,
-.card-actions a:hover {
-  filter: brightness(0.9);
+.card-actions a button:hover {
+  background-color: #117a8b;
 }
 
 a button {
@@ -121,38 +108,20 @@ a button {
   display: inline-block;
   background-color: #ffdf91;
   color: #555;
-  padding: 4px 10px;
+  padding: 3px 8px;
   margin: 0 4px 4px 0;
   border-radius: 6px;
   font-size: 12px;
-  font-weight: bold;
 }
 
 .badge.plot {
-  background: #d4edda;
-  color: #155724;
+  background: #b2fab4;
+  color: #0a5724;
 }
 
 .badge.building {
-  background: #f8d7da;
-  color: #721c24;
-}
-
-.status {
-  font-weight: bold;
-  padding: 4px 8px;
-  border-radius: 6px;
-  margin-left: 10px;
-}
-
-.status.available {
-  background: #d4edda;
-  color: #155724;
-}
-
-.status.sold {
-  background: #f8d7da;
-  color: #721c24;
+  background: #ffd6d6;
+  color: #a60000;
 }
 
 @media (max-width: 600px) {
@@ -161,11 +130,6 @@ a button {
   }
 
   input, select {
-    flex: 1 1 100%;
-  }
-
-  .card-actions button,
-  .card-actions a button {
     flex: 1 1 100%;
   }
 }
