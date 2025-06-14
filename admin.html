@@ -1,36 +1,104 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Admin Panel - Real Estate</title>
+  <title>Admin - Real Estate Listings</title>
   <link rel="stylesheet" href="style.css" />
+  <script type="module" src="firebase-config.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1>🏗️ Real Estate Admin Panel</h1>
-
+    <h1>🏗️ Admin Panel - Add Listing</h1>
     <form id="listingForm">
-      <h2>Add / Edit Listing</h2>
-      <input type="hidden" id="editIndex" />
-      <select id="type" required>
-        <option value="">Select Type</option>
-        <option value="plot">Plot</option>
-        <option value="building">Building</option>
-      </select>
+      <input type="text" id="type" placeholder="Type (plot/building)" required />
       <input type="text" id="owner" placeholder="Owner Name" required />
       <input type="text" id="address" placeholder="Address" required />
       <input type="text" id="location" placeholder="Location" required />
       <input type="number" id="sqft" placeholder="Square Feet" required />
-      <input type="number" id="rate" placeholder="Amount per Sqft" required />
+      <input type="number" id="rate" placeholder="Rate per sqft" required />
       <input type="text" id="contact" placeholder="Contact Number" required />
-      <input type="url" id="image" placeholder="Image URL (optional)" />
-      <button type="submit">Save Listing</button>
+      <input type="text" id="image" placeholder="Image URL (optional)" />
+      <button type="submit">➕ Add Listing</button>
     </form>
-
-    <h2>📋 Listings</h2>
+    <h2>📋 Current Listings</h2>
     <div id="listingsContainer"></div>
   </div>
 
-  <script src="script.js"></script>
+  <script type="module">
+    import { db } from './firebase-config.js';
+    import {
+      collection, addDoc, getDocs, deleteDoc,
+      doc, updateDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const form = document.getElementById("listingForm");
+    const listingsContainer = document.getElementById("listingsContainer");
+    const listingsRef = collection(db, "listings");
+
+    async function loadListings() {
+      listingsContainer.innerHTML = "";
+      const snapshot = await getDocs(listingsRef);
+      snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        const div = document.createElement("div");
+        div.className = "card";
+        div.innerHTML = `
+          ${data.image ? `<img src="${data.image}" />` : ""}
+          <p><strong>${data.type.toUpperCase()}</strong> | Owner: ${data.owner}</p>
+          <p>${data.address}, ${data.location}</p>
+          <p>Area: ${data.sqft} sqft | ₹${data.rate}/sqft</p>
+          <p>Contact: ${data.contact}</p>
+          <p>Status:
+            ${data.sold ? '<span class="badge">Sold</span>' : ''}
+            ${data.contacted ? '<span class="badge">Contacted</span>' : ''}
+            <span class="badge">Follow-ups: ${data.followUps || 0}</span>
+          </p>
+          <div class="card-actions">
+            <button onclick="deleteListing('${docSnap.id}')">🗑️ Delete</button>
+            <button onclick="updateField('${docSnap.id}', 'contacted', false)">🔁 Unmark Contact</button>
+            <button onclick="updateField('${docSnap.id}', 'followUps', 0)">🔄 Reset Follow-ups</button>
+            <button onclick="updateField('${docSnap.id}', 'sold', false)">↩️ Reset Sold</button>
+          </div>
+        `;
+        listingsContainer.appendChild(div);
+      });
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const newListing = {
+        type: form.type.value.trim(),
+        owner: form.owner.value.trim(),
+        address: form.address.value.trim(),
+        location: form.location.value.trim(),
+        sqft: +form.sqft.value,
+        rate: +form.rate.value,
+        contact: form.contact.value.trim(),
+        image: form.image.value.trim(),
+        contacted: false,
+        sold: false,
+        followUps: 0,
+      };
+      await addDoc(listingsRef, newListing);
+      form.reset();
+      loadListings();
+    });
+
+    window.deleteListing = async (id) => {
+      await deleteDoc(doc(db, "listings", id));
+      loadListings();
+    };
+
+    window.updateField = async (id, field, value) => {
+      const listingDoc = doc(db, "listings", id);
+      const update = {};
+      update[field] = value;
+      await updateDoc(listingDoc, update);
+      loadListings();
+    };
+
+    loadListings();
+  </script>
 </body>
 </html>
